@@ -2,21 +2,12 @@ import java.util.Scanner;
 
 ArrayList<Integer> pos_vertice_X = new ArrayList<Integer>();
 ArrayList<Integer> pos_vertice_Y = new ArrayList<Integer>();
-ArrayList<String> nombre_vertice = new ArrayList<String>();
+//ArrayList<String> nombre_vertice = new ArrayList<String>();
 
 //Propiedades de los vertices.
-int tamano_vertice = 20;
-int seleccionar_vertice = 0;
-boolean agregando_vertice = false;
-boolean eliminando_vertice = false;
-boolean moviendo_vertice = false;
-boolean seleccionando_vertice = false;
-boolean nombrando_vertice = false;
+int tamano_vertice = 50;
 
 //Propiedades de las aristas.
-boolean agregando_arista = false;
-boolean eliminando_arista = false;
-boolean seleccionando_arista = false;
 
 void setup() {
   size(1024, 576);
@@ -32,21 +23,19 @@ void draw() {
 }
 
 void mousePressed() {
- agregar_vertice();
+ agregar_vertice(); 
  eliminar_vertice(); 
 }
 
 void mouseDragged() {
-  //mover_vertice();
+  mover_vertice();
 }
 
 void keyPressed() {
- eliminar_vertice(); 
 }
 
 void imprimir_vertice() { 
  int seleccionar_vertice;
-   if (pos_vertice_X.size() > 0) {
     for (int i = 0; i < pos_vertice_X.size(); i++) {
      seleccionar_vertice = 0;
      if (dist(mouseX, mouseY, pos_vertice_X.get(i), pos_vertice_Y.get(i)) < tamano_vertice/2) {
@@ -54,21 +43,28 @@ void imprimir_vertice() {
      }
     ellipse(pos_vertice_X.get(i), pos_vertice_Y.get(i), tamano_vertice + seleccionar_vertice, tamano_vertice + seleccionar_vertice); 
    }
- }
 }
 void agregar_vertice() {
- //String nombre_vertice_aux;
+ boolean agregar = true;
  if (mouseButton == LEFT) {
-  agregando_vertice = true;
-  ellipse(mouseX, mouseY, tamano_vertice, tamano_vertice);
-  pos_vertice_X.add(mouseX);
-  pos_vertice_Y.add(mouseY);
-  //Scanner teclado = new Scanner(System.in);
-  //nombre_vertice_aux = teclado.nextLine();
-  //nombre_vertice.add(nombre_vertice_aux);
-  //textAlign(CENTER, CENTER);
-  //textSize(16);
-  //text(nombre_vertice.get(0), pos_vertice_X.get(0), pos_vertice_Y.get(0));
+   if (pos_vertice_X.size() == 0) {
+     ellipse(mouseX, mouseY, tamano_vertice, tamano_vertice);
+        pos_vertice_X.add(mouseX);
+        pos_vertice_Y.add(mouseY);
+   }
+   else
+   {
+     for (int i = 0; i < pos_vertice_X.size(); i++) {
+      if (dist(mouseX, mouseY, pos_vertice_X.get(i), pos_vertice_Y.get(i)) < tamano_vertice/2) {
+        agregar = false;
+      }
+     }
+      if (agregar == true) {
+        ellipse(mouseX, mouseY, tamano_vertice, tamano_vertice);
+        pos_vertice_X.add(mouseX);
+        pos_vertice_Y.add(mouseY);
+      }
+   }
  }
 }
 
@@ -79,7 +75,21 @@ void eliminar_vertice() {
     if (mouseButton == RIGHT && dist(mouseX, mouseY, pos_vertice_X.get(i), pos_vertice_Y.get(i)) < tamano_vertice/2) {
       pos_vertice_X.remove(i);
       pos_vertice_Y.remove(i);
-      nombre_vertice.remove(i);
+      break;
+    }
+  }
+}
+
+void mover_vertice() {
+  if (mouseButton == LEFT) {
+    for (int i = 0; i < pos_vertice_X.size(); i++) {
+      if (mouseButton == LEFT && dist(mouseX, mouseY, pos_vertice_X.get(i), pos_vertice_Y.get(i)) < tamano_vertice/2) {
+        pos_vertice_X.remove(i);
+        pos_vertice_Y.remove(i);
+        pos_vertice_X.add(mouseX);
+        pos_vertice_Y.add(mouseY);
+        break;
+      }
     }
   }
 }
