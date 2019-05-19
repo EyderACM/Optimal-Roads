@@ -1,58 +1,64 @@
 int estado=0;
-int x,y,r1,r2, x_1,y_1;
 PImage img;
+
+ArrayList<Entity> myEntities = new ArrayList<Entity>(); 
+Entity merida, progreso, ixil, chicxulubPueblo, conkal, ucu, uman, mococha, 
+baca, yaxkukul, tixkokob, tixpehual, kanasin, acanceh, timucuy, seye, cuzama, homun, tecoh, abala;
+
+ArrayList<Road> myRoads = new ArrayList<Road>();
+Road meridaUman;
 
 void setup() {
   size(1250, 575); 
   background(255);  
   img = loadImage("map.png");
-}
-
-void draw() { 
-  switch(estado){
-    case 0:
-      background(255);
-      fill(0); 
-   
-      textAlign(LEFT);
-      text("1. Grafo",(width/2) - 30,220); 
-   
-      break;
-    case 1:     
-      background(255);
-      image(img, 351, 0);
-      fill(100);
-      x=50;
-      y=50;
-      r1=10;
-      r2=10;
-      x_1=150;
-      y_1=150;
-      drawArrow(mouseX,mouseY,x_1,y_1); 
-      ellipse(mouseX,mouseY,r1*2,r2*2);
-      ellipse(x_1,y_1,r1*2,r2*2);
-      fill(50,50,255);
-      text("v1",x+r1*2,y+r2*2);
-      text("v2",x_1+r1*2,y_1+r2*2);
-      fill(0);
-      textAlign(CENTER);
-      text("5. Regresar a Menu",width/2,340);
-  }
+  myEntities.add(merida = new Entity(735, 280, "Mérida"));
+  myEntities.add(progreso = new Entity(712, 47, "Progreso"));
+  myEntities.add(ixil = new Entity(842, 140, "Ixil"));
+  myEntities.add(chicxulubPueblo = new Entity(814, 155, "Chicxulub"));
+  myEntities.add(conkal = new Entity(814, 210, "Conkal"));
+  myEntities.add(ucu = new Entity(650, 238, "Ucú"));
+  myEntities.add(uman = new Entity(650, 350, "Umán"));
+  myEntities.add(mococha = new Entity(859, 175, "Mocochá"));
+  myEntities.add(baca = new Entity(900, 175, "Baca"));
+  myEntities.add(yaxkukul = new Entity(885, 215, "Yaxkukul"));
+  myEntities.add(tixkokob = new Entity(907, 260, "Tixkokob"));
+  myEntities.add(tixpehual = new Entity(875, 277, "Tixpéhual"));
+  myEntities.add(kanasin = new Entity(780, 315, "Kanasín"));
+  myEntities.add(acanceh = new Entity(860, 412, "Acanceh"));
+  myEntities.add(timucuy = new Entity(815, 412, "Timucuy"));
+  myEntities.add(seye = new Entity(917, 387, "Seyé"));
+  myEntities.add(cuzama = new Entity(962, 460, "Cuzamá"));
+  myEntities.add(homun = new Entity(985, 470, "Homún"));
+  myEntities.add(tecoh = new Entity(850, 460, "Tecoh"));
+  myEntities.add(abala = new Entity(680, 535, "Abalá"));
+  myRoads.add(meridaUman = new Road(merida, uman, 30));
   
 }
 
-void keyPressed() {
-switch(key) {
-  case '1': 
-    estado=1;  // Does not execute
-    break;
-  case '5':
-    estado= 0;
-    break;
-  }
+void draw() { 
+      background(255);
+      image(img, 351, 0);
+      /* Creando Municipios de la zona Noroeste de Yucatán */
+      for(int i = 0; i < myEntities.size(); i++){
+        myEntities.get(i).display(15);
+      }
+      
+      for(int i = 0; i < myRoads.size(); i++){
+        myRoads.get(i).drawLine();
+      }
 }
 
-
+Entity findByName(ArrayList<Entity> entities,String name){
+  Entity toBeFound = null;
+  for(int i = 0; i < entities.size(); i++){
+    if(entities.get(i).name == name){
+      toBeFound = entities.get(i); 
+      break;
+    }
+  }
+  return toBeFound;
+}
 
 //Para dibujar la flecha de la arista dirigida
 int[] arrowhead = {0,-4,0,4,7,0};
@@ -61,7 +67,7 @@ int[] arrowhead = {0,-4,0,4,7,0};
     int dx=ox-x;
     int dy=oy-y;
     float angle = getDirection(dx,dy);
-    float vl = sqrt(dx*dx+dy*dy) - sqrt(r1*r1+r2*r2)*1.5;
+    float vl = sqrt(dx*dx+dy*dy) - sqrt(10*10+10*10)*1.5;
     int[] end = rotateCoordinate(vl, 0, angle);
     line(x,y,x+end[0],y+end[1]);
     drawArrowHead(x+end[0], y+end[1], angle);
