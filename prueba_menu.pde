@@ -75,6 +75,9 @@ void draw() {
       /* Creando Municipios de la zona Noroeste de Yucatán */
       for(int i = 0; i < myEntities.size(); i++){
         myEntities.get(i).display(15);
+        if(estado != 2){
+          myEntities.get(i).isClicked(false);
+        }
       }    
       
       titulo();
@@ -104,7 +107,7 @@ void opciones(){
       pushStyle();
       fill(0);      
       textSize(15);
-      text("Presiona el número en tu teclado", 175.5, 190);
+      text("Presiona el número en su teclado", 175.5, 190);
       text("1.- Simular municipio", 175.5, 240);
       text("2.- Simular carretera", 175.5, 280);
       text("3.- Borrar municipio", 175.5, 320);
@@ -143,20 +146,18 @@ void eleccion(){
   }
 }
 
-void makeARoad(){
+void makeARoad(){  
   for(int i = 0; i < myEntities.size(); i++){
     float dist = dist(mouseX, mouseY, myEntities.get(i).posX, myEntities.get(i).posY);
-    if(dist < 45 && !firstFound){
-      println("You clicked on: " + myEntities.get(i).name);
+    if(dist < 15 && !firstFound){
       firstEntityForRoad = myEntities.get(i);
       firstEntityForRoad.isClicked(true);
       firstFound = true;
-    } else if(dist < 45 && firstFound){
-      println("Your second click is on: " + myEntities.get(i).name);
+    } else if(dist < 15 && firstFound){      
       secondEntityForRoad = myEntities.get(i);
       secondEntityForRoad.isClicked(true);
     }
-    if(firstEntityForRoad != null && secondEntityForRoad != null){
+    if(firstEntityForRoad != null && secondEntityForRoad != null && firstEntityForRoad != secondEntityForRoad){
       Road newRoad = new Road(firstEntityForRoad, secondEntityForRoad);         
       myRoads.add(newRoad);
       firstFound = false;
@@ -189,6 +190,7 @@ void keyPressed() {
       estado=2;  // Prints "One"
       firstEntityForRoad = null;
       secondEntityForRoad = null;
+      firstFound = false;
       break;
     case '3':
       estado=3;
