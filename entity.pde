@@ -7,6 +7,11 @@ class Entity {
   
   float diameter;
   
+    
+  Entity(float posX, float posY){   
+    this(posX, posY, "generado");
+  }
+  
   Entity(float posX, float posY, String name){
     this.posX = posX;
     this.posY = posY;

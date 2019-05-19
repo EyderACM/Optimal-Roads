@@ -1,5 +1,8 @@
 int estado=0;
 PImage img;
+Boolean firstFound = false;
+Entity firstEntityForRoad = null;
+Entity secondEntityForRoad = null;
 
 ArrayList<Entity> myEntities = new ArrayList<Entity>(); 
 Entity merida, progreso, ixil, chicxulubPueblo, conkal, ucu, uman, mococha, 
@@ -75,6 +78,8 @@ void draw() {
       }    
       
       titulo();
+      opciones();
+      eleccion();
 }
 
 void titulo(){
@@ -93,6 +98,104 @@ void titulo(){
   popStyle();     
 }
 
+void opciones(){
+  switch(estado){
+    case 0:
+      pushStyle();
+      fill(0);      
+      textSize(15);
+      text("Presiona el número en tu teclado", 175.5, 190);
+      text("1.- Simular municipio", 175.5, 240);
+      text("2.- Simular carretera", 175.5, 280);
+      text("3.- Borrar municipio", 175.5, 320);
+      text("4.- Borrar carretera", 175.5, 360);
+      text("5.- Ruta más corta", 175.5, 400);
+      text("6.- Algoritmo 2", 175.5, 440);
+      textAlign(CENTER);
+      break;
+    case 1:
+      pushStyle();
+      fill(0);      
+      textSize(15);
+      text("1.- Simular municipio", 175.5, 240);
+      popStyle();    
+      break;
+    case 2:
+      pushStyle();
+      fill(0);      
+      textSize(15);    
+      text("2.- Simular carretera", 175.5, 280);
+      popStyle();
+      break;
+  } 
+}
+
+void eleccion(){
+  switch(estado){
+    case 1:
+      fill(204, 102, 0);
+      ellipse(mouseX, mouseY, 15, 15);
+      break;
+    case 2:         
+      break;
+  }
+}
+
+void makeARoad(){
+  for(int i = 0; i < myEntities.size(); i++){
+    float dist = dist(mouseX, mouseY, myEntities.get(i).posX, myEntities.get(i).posY);
+    if(dist < 45 && !firstFound){
+      println("You clicked on: " + myEntities.get(i).name);
+      firstEntityForRoad = myEntities.get(i);
+      firstFound = true;
+    } else if(dist < 45 && firstFound){
+      println("Your second click is on: " + myEntities.get(i).name);
+      secondEntityForRoad = myEntities.get(i);
+    }
+    if(firstEntityForRoad != null && secondEntityForRoad != null){
+      Road newRoad = new Road(firstEntityForRoad, secondEntityForRoad);         
+      myRoads.add(newRoad);
+      firstFound = false;     
+      estado = 0;
+    }
+  }       
+}
+
+void mouseClicked(){
+  switch(estado){
+    case 1:
+      Entity myEntity = new Entity(mouseX, mouseY);
+      myEntities.add(myEntity);      
+      estado = 0;
+      break;
+    case 2:
+      makeARoad();      
+      break;    
+  }
+}
+
+void keyPressed() {
+  switch(key) {
+    case '1': 
+      estado=1;  // Does not execute
+      break;
+    case '2': 
+      estado=2;  // Prints "One"
+      firstEntityForRoad = null;
+      secondEntityForRoad = null;
+      break;
+    case '3':
+      estado=3;
+      break;
+    case '4':
+      estado=4;
+      break;
+    case '5':
+      estado=0;
+      break;
+      }
+}
+
 Entity findByName(ArrayList<Entity> entities,String name){
   Entity toBeFound = null;
   for(int i = 0; i < entities.size(); i++){
@@ -103,55 +206,3 @@ Entity findByName(ArrayList<Entity> entities,String name){
   }
   return toBeFound;
 }
-
-//Para dibujar la flecha de la arista dirigida
-int[] arrowhead = {0,-4,0,4,7,0};
-  void drawArrow(int x, int y, int ox, int oy)
-  {
-    int dx=ox-x;
-    int dy=oy-y;
-    float angle = getDirection(dx,dy);
-    float vl = sqrt(dx*dx+dy*dy) - sqrt(10*10+10*10)*1.5;
-    int[] end = rotateCoordinate(vl, 0, angle);
-    line(x,y,x+end[0],y+end[1]);
-    drawArrowHead(x+end[0], y+end[1], angle);
-  }
-  void drawArrowHead(int ox, int oy, float angle) {
-    int[] rc1 = rotateCoordinate(arrowhead[0], arrowhead[1], angle);
-    int[] rc2 = rotateCoordinate(arrowhead[2], arrowhead[3], angle);
-    int[] rc3 = rotateCoordinate(arrowhead[4], arrowhead[5], angle);
-    int[] narrow = {ox+ rc1[0], oy+ rc1[1], ox+ rc2[0], oy+ rc2[1], ox+ rc3[0], oy+ rc3[1]};
-    stroke(0);
-    fill(255);
-    triangle(narrow[0], narrow[1], narrow[2], narrow[3], narrow[4], narrow[5]);
-  }
-  
-  // universal helper function: get the angle (in radians) for a particular dx/dy
-float getDirection(double dx, double dy) {
-  // quadrant offsets
-  double d1 = 0.0;
-  double d2 = PI/2.0;
-  double d3 = PI;
-  double d4 = 3.0*PI/2.0;
-  // compute angle basd on dx and dy values
-  double angle = 0;
-  float adx = abs((float)dx);
-  float ady = abs((float)dy);
-  // Vertical lines are one of two angles
-  if(dx==0) { angle = (dy>=0? d2 : d4); }
-  // Horizontal lines are also one of two angles
-  else if(dy==0) { angle = (dx>=0? d1 : d3); }
-  // The rest requires trigonometry (note: two use dx/dy and two use dy/dx!)
-  else if(dx>0 && dy>0) { angle = d1 + atan(ady/adx); }    // direction: X+, Y+
-  else if(dx<0 && dy>0) { angle = d2 + atan(adx/ady); }    // direction: X-, Y+
-  else if(dx<0 && dy<0) { angle = d3 + atan(ady/adx); }    // direction: X-, Y-
-  else if(dx>0 && dy<0) { angle = d4 + atan(adx/ady); }    // direction: X+, Y-
-  // return directionality in positive radians
-  return (float)(angle + 2*PI)%(2*PI); }
-
-// universal helper function: rotate a coordinate over (0,0) by [angle] radians
-int[] rotateCoordinate(float x, float y, float angle) {
-  int[] rc = {0,0};
-  rc[0] = (int)(x*cos(angle) - y*sin(angle));
-  rc[1] = (int)(x*sin(angle) + y*cos(angle));
-  return rc; }

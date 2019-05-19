@@ -5,6 +5,10 @@ class Road {
   String roadName;
   float time;
   
+  Road(Entity firstPlace, Entity secondPlace){
+    this(firstPlace, secondPlace, 0);
+  }
+  
   Road(Entity firstPlace, Entity secondPlace, float time){
     this.firstPlace = firstPlace;
     this.secondPlace = secondPlace;
