@@ -1,6 +1,7 @@
 int estado=0;
 PImage img;
 Boolean firstFound = false;
+Boolean onCreateRoad = false;
 Entity firstEntityForRoad = null;
 Entity secondEntityForRoad = null;
 
@@ -167,7 +168,14 @@ void eleccion(){
       fill(204, 102, 0);
       ellipse(mouseX, mouseY, 15, 15);
       break;
-    case 2:         
+    case 2:
+      if(onCreateRoad){
+        pushStyle();
+        stroke(255);
+        strokeWeight(2);
+        line(firstEntityForRoad.posX, firstEntityForRoad.posY, mouseX, mouseY);
+        popStyle();        
+      }      
       break;
   }
 }
@@ -179,6 +187,7 @@ void makeARoad(){
       firstEntityForRoad = myEntities.get(i);
       firstEntityForRoad.isClicked(true);
       firstFound = true;
+      onCreateRoad = true;
     } else if(dist < 15 && firstFound){      
       secondEntityForRoad = myEntities.get(i);
       secondEntityForRoad.isClicked(true);
@@ -189,6 +198,7 @@ void makeARoad(){
       firstFound = false;
       firstEntityForRoad.isClicked(false);
       secondEntityForRoad.isClicked(false);
+      onCreateRoad = false;
       estado = 0;
     }
   }       
