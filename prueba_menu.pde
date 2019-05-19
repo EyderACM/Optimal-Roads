@@ -40,8 +40,8 @@ void setup() {
    
   myRoads.add(meridaUman = new Road(merida, uman, 30));
   myRoads.add(meridaUcu = new Road(merida, ucu, 30));
-  myRoads.add(meridaProgreso = new Road(merida, progreso, 60));
   myRoads.add(meridaConkal = new Road(merida, conkal, 70));
+  myRoads.add(meridaProgreso = new Road(merida, progreso, 60));
   myRoads.add(meridaKanasin = new Road(merida, kanasin, 30));
   myRoads.add(meridaTixpehual = new Road(merida, tixpehual, 30));
   myRoads.add(umanAbala = new Road(uman, abala, 20));
@@ -73,10 +73,15 @@ void draw() {
       }
       
       /* Creando Municipios de la zona Noroeste de Yucatán */
-      for(int i = 0; i < myEntities.size(); i++){
+      for(int i = 0; i < myEntities.size(); i++){             
         myEntities.get(i).display(15);
         if(estado != 2){
           myEntities.get(i).isClicked(false);
+        }
+        if(estado == 3){
+          myEntities.get(i).isHighlighted(true);
+        }else {
+          myEntities.get(i).isHighlighted(false);
         }
       }    
       
@@ -132,7 +137,16 @@ void opciones(){
       text("que deseas unir con una carretera", 175.5, 380);
       popStyle();
       break;
-  } 
+    case 3:
+      pushStyle();
+      fill(0);      
+      textSize(15);    
+      text("3.- Borrar municipio", 175.5, 320);
+      text("Clickea sobre el municipio que", 175.5, 350);
+      text("deseas borrar", 175.5, 380);
+      popStyle();
+      break;
+  }
 }
 
 void eleccion(){
@@ -168,6 +182,27 @@ void makeARoad(){
   }       
 }
 
+void deleteEntity(){
+  for(int i = 0; i < myEntities.size(); i++){
+    float dist = dist(mouseX, mouseY, myEntities.get(i).posX, myEntities.get(i).posY);
+    if(dist < 15){
+      Entity toBeDeleted = myEntities.get(i);
+      for(int j = 0; j < myRoads.size(); j++){
+        println(j);
+        boolean isFirstPlace = myRoads.get(j).firstPlace == toBeDeleted;
+        boolean isSecondPlace = myRoads.get(j).secondPlace == toBeDeleted;
+        println("is Merida with " + myRoads.get(j).secondPlace.name + " " + isFirstPlace);
+        if(isFirstPlace || isSecondPlace){
+          myRoads.remove(j);
+          j = -1;
+        }
+      }
+      myEntities.remove(i);
+    }
+    estado = 0;
+  }
+}
+
 void mouseClicked(){
   switch(estado){
     case 1:
@@ -177,9 +212,13 @@ void mouseClicked(){
       break;
     case 2:
       makeARoad();      
-      break;    
-  }
+      break;
+    case 3:
+      deleteEntity();
+      break;
+  }   
 }
+
 
 void keyPressed() {
   switch(key) {
@@ -193,12 +232,12 @@ void keyPressed() {
       firstFound = false;
       break;
     case '3':
-      estado=3;
+      estado=3;     
       break;
     case '4':
       estado=4;
       break;
-    case '5':
+    case '0':
       estado=0;
       break;
       }

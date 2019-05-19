@@ -5,6 +5,7 @@ class Entity {
   float posX;
   float posY;
   boolean isClicked = false;
+  boolean isHighlighted = false; 
   
   float diameter;
   
@@ -20,19 +21,17 @@ class Entity {
   }
   
   void display(float diameter){
-    if(!isClicked){
-      fill(204, 102, 0);
-      ellipse(posX, posY, diameter, diameter);
-      fill(360, 360, 360);
-      text(name, posX, posY - 15);
-      textAlign(CENTER);
+    if(isClicked){
+      fill(42, 255, 87);      
+    }else if(isHighlighted){
+      fill(255, 42, 42);      
     }else {
-      fill(42, 255, 87);
-      ellipse(posX, posY, diameter, diameter);
-      fill(360, 360, 360);
-      text(name, posX, posY - 15);
-      textAlign(CENTER);
+      fill(204, 102, 0);
     }
+    ellipse(posX, posY, diameter, diameter);
+    fill(360, 360, 360);
+    text(name, posX, posY - 15);
+    textAlign(CENTER);     
   }
   
   void addPathTo(Entity newEntity){
@@ -41,5 +40,9 @@ class Entity {
   
   void isClicked(Boolean isClicked){
     this.isClicked = isClicked;
+  }
+  
+  void isHighlighted(Boolean isHighlighted){
+    this.isHighlighted = isHighlighted;
   }
 }
