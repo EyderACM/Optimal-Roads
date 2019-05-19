@@ -75,14 +75,17 @@ void draw() {
       /* Creando Municipios de la zona Noroeste de Yucatán */
       for(int i = 0; i < myEntities.size(); i++){             
         myEntities.get(i).display(15);
-        if(estado != 2){
-          myEntities.get(i).isClicked(false);
-        }
-        if(estado == 3){
-          myEntities.get(i).isHighlighted(true);
-        }else {
-          myEntities.get(i).isHighlighted(false);
-        }
+        switch(estado){
+          case 2:
+          case 4:            
+            break;
+          case 3:
+            myEntities.get(i).isHighlighted(true);
+            break;
+          default:
+            myEntities.get(i).isHighlighted(false);
+            myEntities.get(i).isClicked(false);
+        }                
       }    
       
       titulo();
@@ -146,6 +149,15 @@ void opciones(){
       text("deseas borrar", 175.5, 380);
       popStyle();
       break;
+    case 4:
+      pushStyle();
+      fill(0);      
+      textSize(15);    
+      text("4.- Borrar carretera", 175.5, 360);
+      text("Clickea sobre la carretera que", 175.5, 250);
+      text("deseas borrar", 175.5, 280);
+      popStyle();
+      break;
   }
 }
 
@@ -203,6 +215,33 @@ void deleteEntity(){
   }
 }
 
+void deleteRoad(){
+  for(int i = 0; i < myEntities.size(); i++){
+    float dist = dist(mouseX, mouseY, myEntities.get(i).posX, myEntities.get(i).posY);
+    if(dist < 15 && !firstFound){
+      firstEntityForRoad = myEntities.get(i);
+      firstEntityForRoad.isClicked(true);
+      firstFound = true;
+    } else if(dist < 15 && firstFound){      
+      secondEntityForRoad = myEntities.get(i);
+      secondEntityForRoad.isClicked(true);
+    }
+    if(firstEntityForRoad != null && secondEntityForRoad != null && firstEntityForRoad != secondEntityForRoad){
+      for(int j = 0; j < myRoads.size(); j++){
+        boolean firstThenSecond = myRoads.get(j).firstPlace == firstEntityForRoad && myRoads.get(j).secondPlace == secondEntityForRoad;
+        boolean secondThenFirst = myRoads.get(j).firstPlace == secondEntityForRoad && myRoads.get(j).secondPlace == firstEntityForRoad;
+        if(firstThenSecond || secondThenFirst){
+          myRoads.remove(j);
+        }
+      }
+      firstFound = false;
+      firstEntityForRoad.isClicked(false);
+      secondEntityForRoad.isClicked(false);
+      estado = 0;
+    }    
+  }
+}
+
 void mouseClicked(){
   switch(estado){
     case 1:
@@ -215,6 +254,9 @@ void mouseClicked(){
       break;
     case 3:
       deleteEntity();
+      break;
+    case 4:
+      deleteRoad();
       break;
   }   
 }
@@ -236,6 +278,9 @@ void keyPressed() {
       break;
     case '4':
       estado=4;
+      firstEntityForRoad = null;
+      secondEntityForRoad = null;      
+      firstFound = false;
       break;
     case '0':
       estado=0;

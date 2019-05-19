@@ -25,7 +25,7 @@ class Entity {
       fill(42, 255, 87);      
     }else if(isHighlighted){
       fill(255, 42, 42);      
-    }else {
+    } else {
       fill(204, 102, 0);
     }
     ellipse(posX, posY, diameter, diameter);
