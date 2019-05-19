@@ -2,6 +2,7 @@ int estado=0;
 PImage img;
 Boolean firstFound = false;
 Boolean onCreateRoad = false;
+Boolean nombrando = false;
 Entity firstEntityForRoad = null;
 Entity secondEntityForRoad = null;
 
@@ -16,7 +17,8 @@ kanasinAcanceh, acancehTimucuy, acancehTecoh, acancehSeye, acancehCuzama, cuzama
 
 void setup() {
   size(1250, 575); 
-  background(255);  
+  background(255); 
+  frameRate(60);
   img = loadImage("map.png");
   myEntities.add(merida = new Entity(735, 280, "Mérida"));
   myEntities.add(progreso = new Entity(712, 47, "Progreso"));
@@ -75,10 +77,11 @@ void draw() {
       
       /* Creando Municipios de la zona Noroeste de Yucatán */
       for(int i = 0; i < myEntities.size(); i++){             
-        myEntities.get(i).display(15);
+        myEntities.get(i).display(15);        
         switch(estado){
           case 2:
-          case 4:            
+          case 4:
+            myEntities.get(i).isHighlighted(false);
             break;
           case 3:
             myEntities.get(i).isHighlighted(true);
@@ -130,6 +133,9 @@ void opciones(){
       fill(0);      
       textSize(15);
       text("1.- Simular municipio", 175.5, 240);
+      text("Clickea sobre el lugar donde deseas", 175.5, 350);
+      text("agregar el municipio", 175.5, 380);
+      text("Presiona Enter para salvar el nombre", 175.5, 410);
       popStyle();    
       break;
     case 2:
@@ -252,11 +258,29 @@ void deleteRoad(){
   }
 }
 
+void nameEntity(Entity myEntity){
+  if(myEntity.name == "Nombre"){
+    myEntity.name = "";
+  }
+  if(nombrando){    
+    if(keyCode ==  ENTER){
+      nombrando = false;
+    }  
+    if(keyCode == BACKSPACE && myEntity.name.length() > 0){
+      myEntity.name = myEntity.name.substring(0, myEntity.name.length()-1);
+    }    
+    if((key >= 'a' && key <= 'z') || (key >= 'A' && key <= 'Z')){
+      myEntity.name += str(key);   
+    }
+  }
+}
+
 void mouseClicked(){
   switch(estado){
     case 1:
-      Entity myEntity = new Entity(mouseX, mouseY);
-      myEntities.add(myEntity);      
+      Entity myEntity = new Entity(mouseX, mouseY, "Nombre");
+      myEntities.add(myEntity);
+      nombrando = true;  
       estado = 0;
       break;
     case 2:
@@ -273,9 +297,12 @@ void mouseClicked(){
 
 
 void keyPressed() {
+  if(nombrando){
+    nameEntity(myEntities.get(myEntities.size() - 1));
+  }
   switch(key) {
     case '1': 
-      estado=1;  // Does not execute
+      estado=1;      
       break;
     case '2': 
       estado=2;  // Prints "One"
