@@ -4,6 +4,7 @@ class Entity {
   String name;
   float posX;
   float posY;
+  boolean isClicked = false;
   
   float diameter;
   
@@ -19,16 +20,26 @@ class Entity {
   }
   
   void display(float diameter){
-    fill(204, 102, 0);
-    ellipse(posX, posY, diameter, diameter);
-    fill(360, 360, 360);
-    text(name, posX, posY - 15);
-    textAlign(CENTER);    
+    if(!isClicked){
+      fill(204, 102, 0);
+      ellipse(posX, posY, diameter, diameter);
+      fill(360, 360, 360);
+      text(name, posX, posY - 15);
+      textAlign(CENTER);
+    }else {
+      fill(42, 255, 87);
+      ellipse(posX, posY, diameter, diameter);
+      fill(360, 360, 360);
+      text(name, posX, posY - 15);
+      textAlign(CENTER);
+    }
   }
   
   void addPathTo(Entity newEntity){
     this.goesTo.add(newEntity);
   }
   
-  
+  void isClicked(Boolean isClicked){
+    this.isClicked = isClicked;
+  }
 }

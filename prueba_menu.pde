@@ -125,6 +125,8 @@ void opciones(){
       fill(0);      
       textSize(15);    
       text("2.- Simular carretera", 175.5, 280);
+      text("Clickea sobre los dos municipios", 175.5, 350);
+      text("que deseas unir con una carretera", 175.5, 380);
       popStyle();
       break;
   } 
@@ -147,15 +149,19 @@ void makeARoad(){
     if(dist < 45 && !firstFound){
       println("You clicked on: " + myEntities.get(i).name);
       firstEntityForRoad = myEntities.get(i);
+      firstEntityForRoad.isClicked(true);
       firstFound = true;
     } else if(dist < 45 && firstFound){
       println("Your second click is on: " + myEntities.get(i).name);
       secondEntityForRoad = myEntities.get(i);
+      secondEntityForRoad.isClicked(true);
     }
     if(firstEntityForRoad != null && secondEntityForRoad != null){
       Road newRoad = new Road(firstEntityForRoad, secondEntityForRoad);         
       myRoads.add(newRoad);
-      firstFound = false;     
+      firstFound = false;
+      firstEntityForRoad.isClicked(false);
+      secondEntityForRoad.isClicked(false);
       estado = 0;
     }
   }       
