@@ -6,7 +6,9 @@ Entity merida, progreso, ixil, chicxulubPueblo, conkal, ucu, uman, mococha,
 baca, yaxkukul, tixkokob, tixpehual, kanasin, acanceh, timucuy, seye, cuzama, homun, tecoh, abala;
 
 ArrayList<Road> myRoads = new ArrayList<Road>();
-Road meridaUman;
+Road meridaUman, meridaUcu, meridaProgreso, meridaConkal, meridaKanasin, meridaTixpehual, umanAbala, conkalChicxulub,
+conkalMococha, conkalYaxkukul, mocochaBaca, mocochaIxil,chicxulubIxil, tixpehualYaxkukul, tixpehualTixkokob, bacaYaxkukul,
+kanasinAcanceh, acancehTimucuy, acancehTecoh, acancehSeye, acancehCuzama, cuzamaHomun;
 
 void setup() {
   size(1250, 575); 
@@ -32,21 +34,63 @@ void setup() {
   myEntities.add(homun = new Entity(985, 470, "Homún"));
   myEntities.add(tecoh = new Entity(850, 460, "Tecoh"));
   myEntities.add(abala = new Entity(680, 535, "Abalá"));
+   
   myRoads.add(meridaUman = new Road(merida, uman, 30));
+  myRoads.add(meridaUcu = new Road(merida, ucu, 30));
+  myRoads.add(meridaProgreso = new Road(merida, progreso, 60));
+  myRoads.add(meridaConkal = new Road(merida, conkal, 70));
+  myRoads.add(meridaKanasin = new Road(merida, kanasin, 30));
+  myRoads.add(meridaTixpehual = new Road(merida, tixpehual, 30));
+  myRoads.add(umanAbala = new Road(uman, abala, 20));
+  myRoads.add(conkalChicxulub = new Road(conkal, chicxulubPueblo, 10));
+  myRoads.add(conkalMococha = new Road(conkal, mococha, 15));
+  myRoads.add(conkalYaxkukul = new Road(conkal, yaxkukul, 15));
+  myRoads.add(mocochaBaca = new Road(mococha, baca, 20));
+  myRoads.add(mocochaIxil = new Road(mococha, ixil, 6));
+  myRoads.add(chicxulubIxil = new Road(chicxulubPueblo, ixil, 15));
+  myRoads.add(tixpehualYaxkukul = new Road(tixpehual, yaxkukul, 20));
+  myRoads.add(tixpehualTixkokob = new Road(tixpehual, tixkokob, 12));
+  myRoads.add(tixpehualTixkokob = new Road(baca, yaxkukul, 7));
+  myRoads.add(kanasinAcanceh = new Road(kanasin, acanceh, 20));
+  myRoads.add(acancehTimucuy = new Road(acanceh, timucuy, 20));
+  myRoads.add(acancehTecoh = new Road(acanceh, tecoh, 15));
+  myRoads.add(acancehSeye = new Road(acanceh, seye, 20));
+  myRoads.add(acancehCuzama = new Road(acanceh, cuzama, 25));
+  myRoads.add(cuzamaHomun = new Road(cuzama, homun, 10));
   
 }
 
 void draw() { 
       background(255);
-      image(img, 351, 0);
-      /* Creando Municipios de la zona Noroeste de Yucatán */
-      for(int i = 0; i < myEntities.size(); i++){
-        myEntities.get(i).display(15);
-      }
-      
+      image(img, 351, 0);    
+
+       /* Creando carreteras entre municipios*/
       for(int i = 0; i < myRoads.size(); i++){
         myRoads.get(i).drawLine();
       }
+      
+      /* Creando Municipios de la zona Noroeste de Yucatán */
+      for(int i = 0; i < myEntities.size(); i++){
+        myEntities.get(i).display(15);
+      }    
+      
+      titulo();
+}
+
+void titulo(){
+  pushStyle();
+  fill(0);      
+  textSize(22);
+  text("Rutas eficientes", 175.5, 100);
+  textAlign(CENTER);
+  popStyle();
+  
+  pushStyle();
+  fill(0);      
+  textSize(15);
+  text("Zona Noroeste de Yucatán", 175.5, 130);
+  textAlign(CENTER);
+  popStyle();     
 }
 
 Entity findByName(ArrayList<Entity> entities,String name){
