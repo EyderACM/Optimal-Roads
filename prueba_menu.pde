@@ -1,19 +1,24 @@
+import java.util.*;
+
 int estado=0;
 PImage img;
 Boolean firstFound = false;
 Boolean onCreateRoad = false;
 Boolean nombrando = false;
+Boolean visitedEntity = false;
 Entity firstEntityForRoad = null;
 Entity secondEntityForRoad = null;
 
 ArrayList<Entity> myEntities = new ArrayList<Entity>(); 
 Entity merida, progreso, ixil, chicxulubPueblo, conkal, ucu, uman, mococha, 
-baca, yaxkukul, tixkokob, tixpehual, kanasin, acanceh, timucuy, seye, cuzama, homun, tecoh, abala;
+baca, yaxkukul, tixkokob, tixpehual, kanasin, acanceh, cuzama, homun, tecoh, abala, 
+hunucma, telcachillo, tahmek, sisal;
 
 ArrayList<Road> myRoads = new ArrayList<Road>();
 Road meridaUman, meridaUcu, meridaProgreso, meridaConkal, meridaKanasin, meridaTixpehual, umanAbala, conkalChicxulub,
 conkalMococha, conkalYaxkukul, mocochaBaca, mocochaIxil,chicxulubIxil, tixpehualYaxkukul, tixpehualTixkokob, bacaYaxkukul,
-kanasinAcanceh, acancehTimucuy, acancehTecoh, acancehSeye, acancehCuzama, cuzamaHomun;
+kanasinAcanceh, acancehTecoh, acancehCuzama, cuzamaHomun, hunucmaUcu, hunucmaUman, telcachilloTecoh,
+telcachilloAbala, progresoChicxulub, homunTahmek, meridaTahmek, tahmekTixkokob, sisalProgreso, hunucmaSisal;
 
 void setup() {
   size(1250, 575); 
@@ -34,36 +39,45 @@ void setup() {
   myEntities.add(tixpehual = new Entity(875, 277, "Tixpéhual"));
   myEntities.add(kanasin = new Entity(780, 315, "Kanasín"));
   myEntities.add(acanceh = new Entity(860, 412, "Acanceh"));
-  myEntities.add(timucuy = new Entity(815, 412, "Timucuy"));
-  myEntities.add(seye = new Entity(917, 387, "Seyé"));
   myEntities.add(cuzama = new Entity(962, 460, "Cuzamá"));
   myEntities.add(homun = new Entity(985, 470, "Homún"));
   myEntities.add(tecoh = new Entity(850, 460, "Tecoh"));
   myEntities.add(abala = new Entity(680, 535, "Abalá"));
+  myEntities.add(hunucma = new Entity(555, 250, "Hunucmá"));
+  myEntities.add(telcachillo = new Entity(850, 540, "Tecachillo"));
+  myEntities.add(tahmek = new Entity(1000, 360, "Tahmek"));
+  myEntities.add(sisal = new Entity(445, 130, "Sisal"));
    
-  myRoads.add(meridaUman = new Road(merida, uman, 30));
-  myRoads.add(meridaUcu = new Road(merida, ucu, 30));
-  myRoads.add(meridaConkal = new Road(merida, conkal, 70));
-  myRoads.add(meridaProgreso = new Road(merida, progreso, 60));
-  myRoads.add(meridaKanasin = new Road(merida, kanasin, 30));
-  myRoads.add(meridaTixpehual = new Road(merida, tixpehual, 30));
-  myRoads.add(umanAbala = new Road(uman, abala, 20));
-  myRoads.add(conkalChicxulub = new Road(conkal, chicxulubPueblo, 10));
-  myRoads.add(conkalMococha = new Road(conkal, mococha, 15));
-  myRoads.add(conkalYaxkukul = new Road(conkal, yaxkukul, 15));
-  myRoads.add(mocochaBaca = new Road(mococha, baca, 20));
-  myRoads.add(mocochaIxil = new Road(mococha, ixil, 6));
-  myRoads.add(chicxulubIxil = new Road(chicxulubPueblo, ixil, 15));
-  myRoads.add(tixpehualYaxkukul = new Road(tixpehual, yaxkukul, 20));
-  myRoads.add(tixpehualTixkokob = new Road(tixpehual, tixkokob, 12));
-  myRoads.add(tixpehualTixkokob = new Road(baca, yaxkukul, 7));
-  myRoads.add(kanasinAcanceh = new Road(kanasin, acanceh, 20));
-  myRoads.add(acancehTimucuy = new Road(acanceh, timucuy, 20));
-  myRoads.add(acancehTecoh = new Road(acanceh, tecoh, 15));
-  myRoads.add(acancehSeye = new Road(acanceh, seye, 20));
-  myRoads.add(acancehCuzama = new Road(acanceh, cuzama, 25));
-  myRoads.add(cuzamaHomun = new Road(cuzama, homun, 10));
-  
+  myRoads.add(meridaUman = new Road(merida, uman));
+  myRoads.add(meridaUcu = new Road(merida, ucu));
+  myRoads.add(meridaConkal = new Road(merida, conkal));
+  myRoads.add(meridaProgreso = new Road(merida, progreso));
+  myRoads.add(meridaKanasin = new Road(merida, kanasin));
+  myRoads.add(meridaTixpehual = new Road(merida, tixpehual));
+  myRoads.add(umanAbala = new Road(uman, abala));
+  myRoads.add(conkalChicxulub = new Road(conkal, chicxulubPueblo));
+  myRoads.add(conkalMococha = new Road(conkal, mococha));
+  myRoads.add(conkalYaxkukul = new Road(conkal, yaxkukul));
+  myRoads.add(mocochaBaca = new Road(mococha, baca));
+  myRoads.add(mocochaIxil = new Road(mococha, ixil));
+  myRoads.add(chicxulubIxil = new Road(chicxulubPueblo, ixil));
+  myRoads.add(tixpehualYaxkukul = new Road(tixpehual, yaxkukul));
+  myRoads.add(tixpehualTixkokob = new Road(tixpehual, tixkokob));
+  myRoads.add(tixpehualTixkokob = new Road(baca, yaxkukul));
+  myRoads.add(kanasinAcanceh = new Road(kanasin, acanceh));
+  myRoads.add(acancehTecoh = new Road(acanceh, tecoh));
+  myRoads.add(acancehCuzama = new Road(acanceh, cuzama));
+  myRoads.add(cuzamaHomun = new Road(cuzama, homun));
+  myRoads.add(hunucmaUcu = new Road(hunucma, ucu));
+  myRoads.add(hunucmaUcu = new Road(hunucma, uman));
+  myRoads.add(telcachilloTecoh = new Road(telcachillo, tecoh));
+  myRoads.add(telcachilloAbala = new Road(telcachillo, abala));
+  myRoads.add(progresoChicxulub = new Road(progreso, chicxulubPueblo));
+  myRoads.add(homunTahmek = new Road(homun, tahmek));
+  myRoads.add(homunTahmek = new Road(merida, tahmek));
+  myRoads.add(tahmekTixkokob = new Road(tahmek, tixkokob));
+  myRoads.add(sisalProgreso = new Road(sisal, progreso));
+  myRoads.add(hunucmaSisal = new Road(hunucma, sisal));
 }
 
 void draw() { 
@@ -81,6 +95,7 @@ void draw() {
         switch(estado){
           case 2:
           case 4:
+          case 5:
             myEntities.get(i).isHighlighted(false);
             break;
           case 3:
@@ -89,7 +104,7 @@ void draw() {
           default:
             myEntities.get(i).isHighlighted(false);
             myEntities.get(i).isClicked(false);
-        }                
+        }          
       }    
       
       titulo();
@@ -165,6 +180,15 @@ void opciones(){
       text("deseas borrar", 175.5, 280);
       popStyle();
       break;
+    case 5:
+      pushStyle();
+      fill(0);      
+      textSize(15);    
+      text("5.- Ruta más corta", 175.5, 360);
+      text("Selecciona el municipio del que partirás", 175.5, 250);
+      text("y al que llegarás", 175.5, 280);
+      popStyle();
+      break;    
   }
 }
 
@@ -216,10 +240,8 @@ void deleteEntity(){
     if(dist < 15){
       Entity toBeDeleted = myEntities.get(i);
       for(int j = 0; j < myRoads.size(); j++){
-        println(j);
         boolean isFirstPlace = myRoads.get(j).firstPlace == toBeDeleted;
         boolean isSecondPlace = myRoads.get(j).secondPlace == toBeDeleted;
-        println("is Merida with " + myRoads.get(j).secondPlace.name + " " + isFirstPlace);
         if(isFirstPlace || isSecondPlace){
           myRoads.remove(j);
           j = -1;
@@ -234,7 +256,7 @@ void deleteEntity(){
 void deleteRoad(){
   for(int i = 0; i < myEntities.size(); i++){
     float dist = dist(mouseX, mouseY, myEntities.get(i).posX, myEntities.get(i).posY);
-    if(dist < 15 && !firstFound){
+    if(dist < 15 && !firstFound){      
       firstEntityForRoad = myEntities.get(i);
       firstEntityForRoad.isClicked(true);
       firstFound = true;
@@ -292,7 +314,10 @@ void mouseClicked(){
     case 4:
       deleteRoad();
       break;
-  }   
+    case 5:
+      dijkstraManager();     
+      break;
+  } 
 }
 
 
@@ -319,6 +344,12 @@ void keyPressed() {
       secondEntityForRoad = null;      
       firstFound = false;
       break;
+    case '5':
+      estado = 5;
+      firstEntityForRoad = null;
+      secondEntityForRoad = null;      
+      firstFound = false;
+      break;
     case '0':
       estado=0;
       break;
@@ -334,4 +365,84 @@ Entity findByName(ArrayList<Entity> entities,String name){
     }
   }
   return toBeFound;
+}
+
+void dijkstraManager(){
+  for(int i = 0; i < myEntities.size(); i++){
+    float dist = dist(mouseX, mouseY, myEntities.get(i).posX, myEntities.get(i).posY);
+    if(dist < 15 && !firstFound){
+      firstEntityForRoad = myEntities.get(i);
+      firstEntityForRoad.isClicked(true);
+      firstFound = true;
+      onCreateRoad = true;
+    } else if(dist < 15 && firstFound){      
+      secondEntityForRoad = myEntities.get(i);
+      secondEntityForRoad.isClicked(true);
+    }
+    if(firstEntityForRoad != null && secondEntityForRoad != null && firstEntityForRoad != secondEntityForRoad){
+      dijkstra(firstEntityForRoad);
+      secondEntityForRoad.shortestPath.add(secondEntityForRoad);
+      int isBigger = (secondEntityForRoad.shortestPath.size() > 1) ? 1 : 0;
+      for(int j = 0; j < secondEntityForRoad.shortestPath.size() - isBigger; j++){
+        println(secondEntityForRoad.shortestPath.get(j).name);
+        for(int k = 0; k < myRoads.size(); k++){
+          boolean firstThenSecond = myRoads.get(k).firstPlace == secondEntityForRoad.shortestPath.get(j) && myRoads.get(k).secondPlace == secondEntityForRoad.shortestPath.get(j+1);
+          boolean secondThenFirst = myRoads.get(k).firstPlace == secondEntityForRoad.shortestPath.get(j+1) && myRoads.get(k).secondPlace == secondEntityForRoad.shortestPath.get(j);
+          if(firstThenSecond || secondThenFirst){
+            myRoads.get(k).paintLine(true);
+          }
+        }
+      }
+      firstFound = false;
+      firstEntityForRoad.isClicked(false);
+      secondEntityForRoad.isClicked(false);
+      estado = 0;
+    }
+  }
+}
+
+void dijkstra (Entity start){
+  start.setDistance(0);
+  
+  Set<Entity> settledEntities = new HashSet<Entity>();
+  Set<Entity> unsettledEntities = new HashSet<Entity>();
+  
+  unsettledEntities.add(start);
+  
+  while(unsettledEntities.size() != 0){
+    Entity currentEntity = getLowestDistanceEntity(unsettledEntities);
+    unsettledEntities.remove(currentEntity);
+    for(Map.Entry <Entity, Float> adjacencyPair : currentEntity.getAdjacentEntities().entrySet()){
+      Entity adjacentEntity = adjacencyPair.getKey();
+      Float neighborDistance = adjacencyPair.getValue();
+      if(!settledEntities.contains(adjacentEntity)){
+        calculateMinimumDistance(adjacentEntity, neighborDistance, currentEntity);
+        unsettledEntities.add(adjacentEntity);
+      }
+    }  
+    settledEntities.add(currentEntity);
+  }
+}
+
+Entity getLowestDistanceEntity(Set < Entity > unsettledEntities){
+  Entity lowestDistanceEntity = null;
+  float lowestDistance = 100000;
+  for(Entity entity : unsettledEntities){
+    float entityDistance = entity.distance;
+    if(entityDistance < lowestDistance){
+      lowestDistance = entityDistance;
+      lowestDistanceEntity = entity;
+    }
+  }
+  return lowestDistanceEntity;
+}
+
+void calculateMinimumDistance(Entity evaluationEntity, Float neighborDistance, Entity sourceEntity){
+  Float sourceDistance = sourceEntity.distance;
+  if(sourceDistance + neighborDistance < evaluationEntity.distance){
+    evaluationEntity.setDistance(sourceDistance + neighborDistance);
+    LinkedList<Entity> shortestPath = new LinkedList<Entity>(sourceEntity.shortestPath);
+    shortestPath.add(sourceEntity);
+    evaluationEntity.shortestPath = shortestPath;
+  }
 }

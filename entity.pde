@@ -1,11 +1,13 @@
 class Entity {
   
-  ArrayList<Entity> goesTo = new ArrayList<Entity>();
+  Map<Entity, Float> goesTo = new HashMap<Entity, Float>();
+  List<Entity> shortestPath = new LinkedList();
   String name;
   float posX;
   float posY;
   boolean isClicked = false;
-  boolean isHighlighted = false; 
+  boolean isHighlighted = false;
+  float distance = Integer.MAX_VALUE; 
   
   float diameter;
   
@@ -18,6 +20,10 @@ class Entity {
     this.posX = posX;
     this.posY = posY;
     this.name = name;
+  }
+  
+  public Map<Entity, Float> getAdjacentEntities(){
+    return goesTo;
   }
   
   void display(float diameter){
@@ -34,13 +40,17 @@ class Entity {
     textAlign(CENTER);     
   }
   
-  void addPathTo(Entity newEntity){
-    this.goesTo.add(newEntity);
+  void addPathTo(Entity newEntity, float km){
+    this.goesTo.put(newEntity, km);
   }
+  
+  void setDistance(float distance){
+    this.distance = distance;
+  }  
   
   void isClicked(Boolean isClicked){
     this.isClicked = isClicked;
-  }
+  }  
   
   void isHighlighted(Boolean isHighlighted){
     this.isHighlighted = isHighlighted;
