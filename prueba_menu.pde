@@ -86,6 +86,9 @@ void draw() {
 
        /* Creando carreteras entre municipios*/
       for(int i = 0; i < myRoads.size(); i++){
+        if(estado != 5){
+          myRoads.get(i).paintLine(false);
+        }
         myRoads.get(i).drawLine();
       }
       
@@ -315,7 +318,7 @@ void mouseClicked(){
       deleteRoad();
       break;
     case 5:
-      dijkstraManager();     
+      dijkstraManager();
       break;
   } 
 }
@@ -334,6 +337,7 @@ void keyPressed() {
       firstEntityForRoad = null;
       secondEntityForRoad = null;
       firstFound = false;
+      onCreateRoad = false;
       break;
     case '3':
       estado=3;     
@@ -349,6 +353,7 @@ void keyPressed() {
       firstEntityForRoad = null;
       secondEntityForRoad = null;      
       firstFound = false;
+      onCreateRoad = false;
       break;
     case '0':
       estado=0;
@@ -393,15 +398,22 @@ void dijkstraManager(){
           }
         }
       }
-      firstFound = false;
+      firstFound = false;       
       firstEntityForRoad.isClicked(false);
       secondEntityForRoad.isClicked(false);
-      estado = 0;
     }
   }
 }
 
+void clearAllEntities(){
+  for(int i = 0; i < myEntities.size(); i++){
+    myEntities.get(i).shortestPath.clear();
+    myEntities.get(i).distance = Integer.MAX_VALUE; 
+  }
+}
+
 void dijkstra (Entity start){
+  clearAllEntities();
   start.setDistance(0);
   
   Set<Entity> settledEntities = new HashSet<Entity>();
