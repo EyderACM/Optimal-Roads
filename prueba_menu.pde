@@ -179,8 +179,8 @@ void opciones(){
       fill(0);      
       textSize(15);    
       text("4.- Borrar carretera", 175.5, 360);
-      text("Clickea sobre la carretera que", 175.5, 250);
-      text("deseas borrar", 175.5, 280);
+      text("Clickea los municipios que unen", 175.5, 250);
+      text("la carretera que deseas borrar", 175.5, 280);
       popStyle();
       break;
     case 5:
@@ -190,6 +190,7 @@ void opciones(){
       text("5.- Ruta más corta", 175.5, 360);
       text("Selecciona el municipio del que partirás", 175.5, 250);
       text("y al que llegarás", 175.5, 280);
+      text("(Solo con municipios enlazados)", 175.5, 310);
       popStyle();
       break;    
   }
@@ -389,7 +390,6 @@ void dijkstraManager(){
       secondEntityForRoad.shortestPath.add(secondEntityForRoad);
       int isBigger = (secondEntityForRoad.shortestPath.size() > 1) ? 1 : 0;
       for(int j = 0; j < secondEntityForRoad.shortestPath.size() - isBigger; j++){
-        println(secondEntityForRoad.shortestPath.get(j).name);
         for(int k = 0; k < myRoads.size(); k++){
           boolean firstThenSecond = myRoads.get(k).firstPlace == secondEntityForRoad.shortestPath.get(j) && myRoads.get(k).secondPlace == secondEntityForRoad.shortestPath.get(j+1);
           boolean secondThenFirst = myRoads.get(k).firstPlace == secondEntityForRoad.shortestPath.get(j+1) && myRoads.get(k).secondPlace == secondEntityForRoad.shortestPath.get(j);
