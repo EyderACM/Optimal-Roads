@@ -4,7 +4,7 @@ import java.util.*;
 //Vertex secondVertexForEdge = null;
 Vertex root = null;
 Vertex child = null;
-int opcion = 0, vertexCont = 0, leafCont = 0;
+int opcion = 0, vertexCont = 0, leafCont = 0, heightContGlobal = 0;
 boolean searching = false, firstFound = false, vertexFound = false;
 Vertex firstVertexForPath = null; //Se agregó para localizar NODOS.
 Vertex secondVertexForPath = null; //Se agregó para localizar NODOS.
@@ -78,6 +78,8 @@ void setup() {
  myEdges.add(edge16 = new Edge(nieto6, bisnieto3));
  leafCont = leafCont();
  vertexCont = myVertex.size();
+ heightCont(myVertex.get(0), 1);
+ println("Altura del arbol: ", heightContGlobal);
 }
 
 void draw() {
@@ -144,6 +146,7 @@ void opciones() {
      text("LOCALIZAR NODOS", 175, 270);
      text("Introduzca el nombre del nodo a localizar: ", 175, 300);
      text("Presiona ENTER para salvar el nombre.", 175, 380);
+     text("Presiona 5 para regresar al menú.", 175, 410);
      searching = true;
      fill(255);
      textSize(10);
@@ -156,7 +159,7 @@ void conteo() {
   fill(0);
   textSize(10);
   textAlign(RIGHT);
-  text("Cantidad nodos: "+vertexCont+"      Cantidad hojas: "+leafCont+"      Altura del arbol: ", width - 10, height - 10); 
+  text("Cantidad nodos: "+vertexCont+"      Cantidad hojas: "+leafCont+"      Altura del arbol: ", width - 10, height - 10); //Agregar heightCont
   textAlign(CENTER);
   fill(255);
 }
@@ -183,6 +186,32 @@ int leafCont() {
  }
  
  return leafCont;
+}
+
+int heightCont(Vertex vertex, int cont) {
+  boolean vertexLeaf = true;
+   for (int i = 0; i < myEdges.size(); i++) {
+     if (myEdges.get(i).vertexRoot.equals(vertex)) {
+       for (int j = 0; j < myVertex.size(); j++) {
+         if (myVertex.get(j).equals(myEdges.get(i).vertexChild)) {
+           Vertex vertexAuxRoot = myVertex.get(j);
+           cont += 1;
+           int heightSubTree = heightCont(vertexAuxRoot, cont);
+           if (heightSubTree > cont) {
+             heightContGlobal = heightSubTree;
+           }
+           vertexLeaf = false;
+           break;
+         }
+       }
+       vertexLeaf = false;
+     }
+   }
+   if (vertexLeaf == true) {
+     return cont - 1; 
+   } else {
+     return cont;
+   }
 }
 
 void keyPressed() {
@@ -213,6 +242,7 @@ void keyPressed() {
      break;
    case '4':
      opcion = 4;
+     searchVertex.clear();
      Vertex vertexToSearch = new Vertex(" ");
      searchVertex.add(vertexToSearch);
      searching = true;
@@ -236,11 +266,11 @@ void searchingVertex() {
    textSize(15);
    textAlign(CENTER);
    text(searchVertex.get(0).vertexName, 175, 330);
-   //text("Presiona 5 para CONTINUAR.", 175, 410); <---------- Me quedé aquí
    fill(255);
    textSize(10);
    if (keyCode == ENTER) {
      println("Estás buscando: " + searchVertex.get(0).vertexName);
+     searchPathTo.add(myVertex.get(0)); //<-----
      findPath(myVertex.get(0), searchVertex.get(0));
      //opcion = 0;
      searching = false;
