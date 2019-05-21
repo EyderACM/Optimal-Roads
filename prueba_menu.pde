@@ -94,19 +94,24 @@ void draw() {
       
       /* Creando Municipios de la zona Noroeste de Yucatán */
       for(int i = 0; i < myEntities.size(); i++){             
-        myEntities.get(i).display(15);        
+        myEntities.get(i).display(15);
         switch(estado){
           case 2:
           case 4:
           case 5:
             myEntities.get(i).isHighlighted(false);
+            myEntities.get(i).isColored(false);
             break;
           case 3:
             myEntities.get(i).isHighlighted(true);
             break;
+          case 6:
+            break;
           default:
             myEntities.get(i).isHighlighted(false);
-            myEntities.get(i).isClicked(false);
+            myEntities.get(i).isClicked(false);      
+            myEntities.get(i).isColored(false);
+            myEntities.get(i).entityColor = -1;
         }          
       }    
       
@@ -143,7 +148,7 @@ void opciones(){
       text("3.- Borrar municipio", 175.5, 320);
       text("4.- Borrar carretera", 175.5, 360);
       text("5.- Ruta más corta", 175.5, 400);
-      text("6.- Algoritmo 2", 175.5, 440);
+      text("6.- Coloreado de grafos", 175.5, 440);
       textAlign(CENTER);
       break;
     case 1:
@@ -356,6 +361,10 @@ void keyPressed() {
       firstFound = false;
       onCreateRoad = false;
       break;
+    case '6':
+      estado = 6;
+      graphColoring();
+      break;
     case '0':
       estado=0;
       break;
@@ -457,4 +466,31 @@ void calculateMinimumDistance(Entity evaluationEntity, Float neighborDistance, E
     shortestPath.add(sourceEntity);
     evaluationEntity.shortestPath = shortestPath;
   }
+}
+
+void graphColoring(){
+  for(int i = 0; i < myEntities.size(); i++){
+    myEntities.get(i).entityColor = -1;    
+  }
+  ArrayList<Integer> available = new ArrayList<Integer>();
+  available.add(0);
+  myEntities.get(0).entityColor = 0;
+  int colors = 1;
+  
+  for(int i = 0; i < myEntities.size(); i++){
+    ArrayList<Integer> toCheck = available;
+    for(Map.Entry<Entity, Float> entry : myEntities.get(i).goesTo.entrySet()){
+      if(toCheck.contains(entry.getKey().entityColor)){
+        toCheck.remove(toCheck.indexOf(entry.getKey().entityColor));
+      }  
+    }
+    if(toCheck.size() > 0){
+      myEntities.get(i).entityColor = toCheck.get(0);
+    }else {
+      available.add(colors);
+      colors++;
+      myEntities.get(i).entityColor = colors;    
+    }
+    myEntities.get(i).isColored(true);
+  }    
 }

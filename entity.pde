@@ -7,6 +7,8 @@ class Entity {
   float posY;
   boolean isClicked = false;
   boolean isHighlighted = false;
+  boolean isColored = false;
+  int entityColor = -1;
   float distance = Integer.MAX_VALUE; 
   
   float diameter;
@@ -29,13 +31,16 @@ class Entity {
   void display(float diameter){
     if(isClicked){
       fill(42, 255, 87);      
-    }else if(isHighlighted){
+    } else if(isHighlighted){
       fill(255, 42, 42);      
     } else {
       fill(204, 102, 0);
     }
     ellipse(posX, posY, diameter, diameter);
     fill(360, 360, 360);
+    if(isColored){
+      text(entityColor, posX+1, posY+5);
+    }
     text(name, posX, posY - 15);
     textAlign(CENTER);     
   }
@@ -54,5 +59,9 @@ class Entity {
   
   void isHighlighted(Boolean isHighlighted){
     this.isHighlighted = isHighlighted;
+  }
+  
+  void isColored(Boolean isColored){
+    this.isColored = isColored;
   }
 }
