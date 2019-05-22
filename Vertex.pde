@@ -2,6 +2,7 @@ class Vertex {
   
   List<Vertex> pathTo = new ArrayList<Vertex>();
   ArrayList<Vertex> edgeTo = new ArrayList<Vertex>();
+  Vertex father = null;
   int vertexSize = 20;
   int x, y;
   String vertexName;

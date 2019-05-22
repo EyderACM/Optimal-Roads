@@ -18,6 +18,7 @@ Edge edge1, edge2, edge3, edge4, edge5, edge6, edge7, edge8, edge9, edge10, edge
 edge13, edge14, edge15, edge16;
 
 ArrayList<Vertex> searchPathTo = new ArrayList<Vertex>();
+ArrayList<ArrayList<Vertex>> roadsTo = new ArrayList<ArrayList<Vertex>>();
 ArrayList<Vertex> searchVertex = new ArrayList<Vertex>();
 
 int[][] adjacencyArray = {{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -254,6 +255,7 @@ void keyPressed() {
       }
      opcion = 0;
      break;
+
  }
 }
 
@@ -269,9 +271,11 @@ void searchingVertex() {
    fill(255);
    textSize(10);
    if (keyCode == ENTER) {
+     searchPathTo.clear();     
      println("Estás buscando: " + searchVertex.get(0).vertexName);
-     searchPathTo.add(myVertex.get(0)); //<-----
-     findPath(myVertex.get(0), searchVertex.get(0));
+     roadsTo.clear();
+     findPath(myVertex.get(0), searchVertex.get(0));     
+     coloring();
      //opcion = 0;
      searching = false;
    }
@@ -285,50 +289,49 @@ void searchingVertex() {
  searching = false;
 }
 
-void findPath(Vertex vertex, Vertex searchVertex) {
-  if (vertex.vertexName.equals(searchVertex.vertexName)) {
-    //Debemos resaltar tanto la ruta como los vértices.
-    for (int i = 0; i < searchPathTo.size(); i++) {
-      for (int j = 0; j < myVertex.size(); j++) {
-        if (searchPathTo.get(i).equals(myVertex.get(j))) {
-           println("Estás pintando: ", searchPathTo.get(i).vertexName);
-           searchPathTo.get(i).isHighlighted(true);
-           //break;
-        }
-      }
-      for (int j = 0; j < myEdges.size(); j++) {
-        if (searchPathTo.get(i).equals(myEdges.get(i).vertexRoot)) {
-          for (int k = 0; k < searchPathTo.size(); k++) {
-            if (myEdges.get(i).vertexChild.equals(searchPathTo.size())) {
-              myEdges.get(i).paintPath(true);
-            }
-          }
-        }
-      }
-    }
-    println("FELICIDADES, LO ENCONTRASTE");
-  }
-  else {
-    for (int i = 0; i < myEdges.size(); i++) {
-      if (myEdges.get(i).vertexRoot.equals(vertex)) {
-        searchPathTo.add(vertex);
-        for (int j = 0; j < myVertex.size(); j++) {
-          if (myVertex.get(j).equals(myEdges.get(i).vertexChild)) {
-            Vertex vertexAuxRoot = myVertex.get(j); 
-            //Vertex vertexAuxChild = myEdges.get(i).vertexChild;
-            searchPathTo.add(vertexAuxRoot);
-            findPath(vertexAuxRoot, searchVertex); //findPath(vertexAuxChild);
-            //break;
-          }
-        }
-      } else {
-        searchPathTo.clear();
-        //searchPathTo.remove(searchPathTo.size() - 1);
-        //findPath(searchPathTo.get(searchPathTo.size() - 1), searchVertex);
-      }
-    }
+void coloring(){
+  
+  for(int k = 0; k < roadsTo.size(); k++){
+    roadsTo.get(k).add(myVertex.get(0));
+    for (int i = 0; i < roadsTo.get(k).size(); i++) {        
+      roadsTo.get(k).get(i).isHighlighted(true);                       
+    }     
   }
 }
+
+void findPath(Vertex vertex, Vertex searchVertex) {
+  vertex.father = null;
+  for(int i = 0; i < myVertex.size(); i++){
+    if(myVertex.get(i).vertexName.equals(searchVertex.vertexName)){
+      searchPathTo.add(myVertex.get(i));
+    }
+  }
+  
+  for(int i = 0; i < searchPathTo.size(); i++){    
+    ArrayList<Vertex> road = new ArrayList<Vertex>();
+    Vertex current = searchPathTo.get(i);
+    while(current.father != null){
+      road.add(current);
+      println(road.size());
+      current = current.father;
+    }
+    roadsTo.add(road);
+  }
+}
+/*  myVertexList.add(vertex);
+  println(myVertexList.size());
+  println(vertex.vertexName);
+  if(vertex.vertexName.equals(searchVertex.vertexName)){
+      searchPathTo.add(myVertexList);      
+  }else{
+    for (int i = 0; i < vertex.edgeTo.size(); i++) {
+      println(i);
+      findPath(vertex.edgeTo.get(i), searchVertex, myVertexList);
+      
+    } 
+  }
+*/
+
 
 /*ArrayList<Vertex> searchPathTo(int adjacencyArray[][], Vertex vertex) {
   int vertexIndex = -1;

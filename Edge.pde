@@ -5,11 +5,12 @@ class Edge {
   boolean isPath = false;
   
   Edge(Vertex vertexStart, Vertex vertexEnd) {
-  this.vertexRoot = vertexStart;
-  this.vertexChild = vertexEnd;
-   
-  this.vertexRoot.addEdgeTo(vertexChild);
-  this.vertexChild.addEdgeTo(vertexRoot);
+    this.vertexRoot = vertexStart;
+    this.vertexChild = vertexEnd;
+     
+    this.vertexRoot.addEdgeTo(vertexChild);
+    this.vertexChild.addEdgeTo(vertexRoot);
+    vertexChild.father = vertexStart;
    
    for (int i = 0; i < myVertex.size(); i++) {
      if(vertexStart == myVertex.get(i)) {
