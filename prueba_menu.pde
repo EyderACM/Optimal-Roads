@@ -293,6 +293,8 @@ void deleteEntity(){
         boolean isFirstPlace = myRoads.get(j).firstPlace == toBeDeleted;
         boolean isSecondPlace = myRoads.get(j).secondPlace == toBeDeleted;
         if(isFirstPlace || isSecondPlace){
+          myRoads.get(j).firstPlace.goesTo.remove(myRoads.get(j).secondPlace);
+          myRoads.get(j).secondPlace.goesTo.remove(myRoads.get(j).firstPlace);
           myRoads.remove(j);
           j = -1;
         }
@@ -319,6 +321,8 @@ void deleteRoad(){
         boolean firstThenSecond = myRoads.get(j).firstPlace == firstEntityForRoad && myRoads.get(j).secondPlace == secondEntityForRoad;
         boolean secondThenFirst = myRoads.get(j).firstPlace == secondEntityForRoad && myRoads.get(j).secondPlace == firstEntityForRoad;
         if(firstThenSecond || secondThenFirst){
+          myRoads.get(j).firstPlace.goesTo.remove(myRoads.get(j).secondPlace);
+          myRoads.get(j).secondPlace.goesTo.remove(myRoads.get(j).firstPlace);          
           myRoads.remove(j);
         }
       }
@@ -448,7 +452,7 @@ void dijkstraManager(){
 void clearAllEntities(){
   for(int i = 0; i < myEntities.size(); i++){
     myEntities.get(i).shortestPath.clear();
-    myEntities.get(i).distance = Integer.MAX_VALUE; 
+    myEntities.get(i).distance = Integer.MAX_VALUE;
   }
 }
 
