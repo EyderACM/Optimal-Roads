@@ -187,6 +187,7 @@ void opciones(){
       text("Clickea sobre el lugar donde deseas", 175.5, 350);
       text("agregar el municipio", 175.5, 380);
       text("Presiona Enter para salvar el nombre", 175.5, 410);
+      text("Presiona 0 para regresar", 175.5, 500);
       popStyle();    
       break;
     case 2:
@@ -196,6 +197,7 @@ void opciones(){
       text("2.- Simular carretera", 175.5, 280);
       text("Clickea sobre los dos municipios", 175.5, 350);
       text("que deseas unir con una carretera", 175.5, 380);
+      text("Presiona 0 para regresar", 175.5, 500);
       popStyle();
       break;
     case 3:
@@ -205,6 +207,7 @@ void opciones(){
       text("3.- Borrar municipio", 175.5, 320);
       text("Clickea sobre el municipio que", 175.5, 350);
       text("deseas borrar", 175.5, 380);
+      text("Presiona 0 para regresar", 175.5, 500);      
       popStyle();
       break;
     case 4:
@@ -214,6 +217,7 @@ void opciones(){
       text("4.- Borrar carretera", 175.5, 360);
       text("Clickea los municipios que unen", 175.5, 250);
       text("la carretera que deseas borrar", 175.5, 280);
+      text("Presiona 0 para regresar", 175.5, 500);
       popStyle();
       break;
     case 5:
@@ -223,9 +227,18 @@ void opciones(){
       text("5.- Ruta más corta", 175.5, 360);
       text("Selecciona el municipio del que partirás", 175.5, 250);
       text("y al que llegarás", 175.5, 280);
-      text("(Solo con municipios enlazados)", 175.5, 310);
+      text("(Solo grafo inicial)", 175.5, 310);
+      text("Presiona 0 para regresar", 175.5, 500);
       popStyle();
-      break;    
+      break;
+    case 6:
+      pushStyle();
+      fill(0);      
+      textSize(15);    
+      text("6.- Coloreado de grafos", 175.5, 360);
+      text("Presiona 0 para regresar", 175.5, 500);
+      popStyle();
+      break;
   }
 }
 
@@ -399,17 +412,6 @@ void keyPressed() {
       }
 }
 
-Entity findByName(ArrayList<Entity> entities,String name){
-  Entity toBeFound = null;
-  for(int i = 0; i < entities.size(); i++){
-    if(entities.get(i).name == name){
-      toBeFound = entities.get(i); 
-      break;
-    }
-  }
-  return toBeFound;
-}
-
 void dijkstraManager(){
   for(int i = 0; i < myEntities.size(); i++){
     float dist = dist(mouseX, mouseY, myEntities.get(i).posX, myEntities.get(i).posY);
@@ -431,6 +433,7 @@ void dijkstraManager(){
           boolean firstThenSecond = myRoads.get(k).firstPlace == secondEntityForRoad.shortestPath.get(j) && myRoads.get(k).secondPlace == secondEntityForRoad.shortestPath.get(j+1);
           boolean secondThenFirst = myRoads.get(k).firstPlace == secondEntityForRoad.shortestPath.get(j+1) && myRoads.get(k).secondPlace == secondEntityForRoad.shortestPath.get(j);
           if(firstThenSecond || secondThenFirst){
+            println(myRoads.get(k).firstPlace.name);
             myRoads.get(k).paintLine(true);
           }
         }
